@@ -33,7 +33,7 @@ local socket = require("socket")
 ---@class UsableExpr: ExprLike
 ---@field weight number
 ---@operator add(UsableExpr): Sum
----@operator len(): Maybe
+---@operator unm(): Maybe
 
 ---@generic T
 ---@param t T
@@ -110,7 +110,7 @@ expr_mt = {
 	__add = sum,
 	__mul = prod,
 	__call = call,
-	__len = maybe,
+	__unm = maybe,
 	__index = {
 		---@param self ExprLike
 		---@return string[]
@@ -165,7 +165,7 @@ expr_mt = {
 
 math.randomseed(socket.gettime())
 local chainsaw = unit("CHAINSAW")
-local maybe_chainsaw = #chainsaw(0.5)
+local maybe_chainsaw = -chainsaw(0.5)
 local probably_chainsaw = maybe_chainsaw(0.5) + chainsaw(0.5)
 local might_be_2_chainsaws = chainsaw * probably_chainsaw
 for _, v in ipairs(might_be_2_chainsaws:sample()) do
