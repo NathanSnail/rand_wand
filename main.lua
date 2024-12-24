@@ -16,6 +16,7 @@ local socket = require("socket")
 ---@field id "Sum"
 ---@field children UsableExpr[]
 ---@operator call(number): UsableExpr
+---@operator add(UsableExpr | Sum): Sum
 ---@operator mul(ExprLike): Prod
 
 ---@class Prod: ExprLike
@@ -32,7 +33,7 @@ local socket = require("socket")
 
 ---@class UsableExpr: ExprLike
 ---@field weight number
----@operator add(UsableExpr): Sum
+---@operator add(UsableExpr | Sum): Sum
 ---@operator unm(): Maybe
 
 ---@generic T
@@ -163,8 +164,20 @@ expr_mt = {
 	},
 }
 
+local function sample(e)
+	local s = ""
+	for _, v in ipairs(e:sample()) do
+		s = s .. v .. " "
+	end
+	print(s)
+end
+
 math.randomseed(socket.gettime())
 local chainsaw = unit("CHAINSAW")
+local spark = unit("LIGHT_BULLET")
+local sparkt = unit("LIGHT_BULLET_TRIGGER")
+local proj = chainsaw(1) + spark(1) + sparkt(1)
+sample(proj)
 local maybe_chainsaw = -chainsaw(0.5)
 local probably_chainsaw = maybe_chainsaw(0.5) + chainsaw(0.5)
 local might_be_2_chainsaws = chainsaw * probably_chainsaw
